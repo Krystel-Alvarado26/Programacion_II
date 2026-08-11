@@ -1,94 +1,65 @@
-import { View, Text, Image, Pressable, StyleSheet, Platform, Alert } from 'react-native';
+import React from 'react';
+import {ScrollView, View, Text, StyleSheet,} from 'react-native';
 
-export default function HomeScreen() {
-
-  function buttonClick(e: any) {
-    if (Platform.OS === "web") {
-      window.alert("Pronto habrá proyectos por ver");
-    } else {
-      Alert.alert("Pronto habrá proyectos por ver");
-    }
-  }
+export default function App() {
+  const tareas = [
+    'Hacer tarea de programación',
+    'Estudiar para el examen',
+    'Leer la documentación de React Native',
+  ];
 
   return (
-    <View style={styles.contenedor}>
-
-      <Image
-        source={require('../../assets/images/mifoto.png')}
-        style={styles.imagen}
-      />
+    <ScrollView style={styles.contenedor}>
 
       <Text style={styles.titulo}>
-        Krystel Alvarado
+        Lista de tareas
       </Text>
 
-      <Text style={styles.texto}>
-        Estudiante de Ingeniería en Sistemas.
-      </Text>
+      <View style={styles.lista}>
+        {tareas.map((tarea, indice) => (
+          <View
+            style={styles.tarea}
+            key={indice}
+          >
+            <Text style={styles.textoTarea}>
+              {tarea}
+            </Text>
+          </View>
+        ))}
+      </View>
 
-      <Text style={styles.carnet}>
-        Carné: 0907-25-28958
-      </Text>
-
-      <Pressable
-        style={styles.boton}
-        onPress={buttonClick}
-      >
-        <Text style={styles.textoBoton}>
-          Ver proyectos
-        </Text>
-      </Pressable>
-
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   contenedor: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     padding: 20,
-    backgroundColor: '#ffffff',
-  },
-
-  imagen: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
-    marginBottom: 20,
+    backgroundColor: '#f2f2f2',
   },
 
   titulo: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#222222',
-  },
-
-  texto: {
-    fontSize: 16,
     textAlign: 'center',
-    marginBottom: 10,
-    color: '#555555',
+    marginTop: 40,
+    marginBottom: 25,
   },
 
-  carnet: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 20,
-    color: '#555555',
+  lista: {
+    marginTop: 10,
   },
 
-  boton: {
+  tarea: {
+    backgroundColor: 'white',
     padding: 15,
+    marginBottom: 10,
     borderRadius: 10,
-    backgroundColor: '#007AFF',
   },
 
-  textoBoton: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: 'bold',
+  textoTarea: {
+    fontSize: 17,
   },
 });
+
