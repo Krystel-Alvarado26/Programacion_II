@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, View, Text, TextInput, Button, StyleSheet,   } from 'react-native';
+import { ScrollView, View, Text, TextInput, Button, StyleSheet,} from 'react-native';
 
 export default function App() {
 
@@ -11,6 +11,9 @@ export default function App() {
 
   const [nuevaTarea, setNuevaTarea] = useState('');
   const [mostrarInput, setMostrarInput] = useState(false);
+
+  const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
+  const [tareaAEliminar, setTareaAEliminar] = useState<number | null>(null);
 
   const guardarTarea = () => {
 
@@ -25,6 +28,31 @@ export default function App() {
 
     setNuevaTarea('');
     setMostrarInput(false);
+  };
+
+  const confirmarEliminar = (indice: number) => {
+    setTareaAEliminar(indice);
+    setMostrarConfirmacion(true);
+  };
+
+  const eliminarTarea = () => {
+
+    if (tareaAEliminar !== null) {
+
+      const nuevasTareas = tareas.filter(
+        (_, indice) => indice !== tareaAEliminar
+      );
+
+      setTareas(nuevasTareas);
+    }
+
+    setMostrarConfirmacion(false);
+    setTareaAEliminar(null);
+  };
+
+  const cancelarEliminar = () => {
+    setMostrarConfirmacion(false);
+    setTareaAEliminar(null);
   };
 
   return (
@@ -67,14 +95,49 @@ export default function App() {
             style={styles.tarea}
             key={indice}
           >
+
             <Text style={styles.textoTarea}>
               {tarea}
             </Text>
+
+            <View style={styles.botonEliminar}>
+              <Button
+                title="Eliminar"
+                onPress={() => confirmarEliminar(indice)}
+                color="red"
+              />
+            </View>
+
           </View>
 
         ))}
 
       </View>
+
+      {mostrarConfirmacion && (
+        <View style={styles.confirmacion}>
+
+          <Text style={styles.textoConfirmacion}>
+            ¿Está seguro que desea eliminar la tarea?
+          </Text>
+
+          <View style={styles.botonesConfirmacion}>
+
+            <Button
+              title="Cancelar"
+              onPress={cancelarEliminar}
+            />
+
+            <Button
+              title="Eliminar"
+              onPress={eliminarTarea}
+              color="red"
+            />
+
+          </View>
+
+        </View>
+      )}
 
     </ScrollView>
   );
@@ -125,10 +188,40 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 10,
     borderRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 
   textoTarea: {
     fontSize: 17,
+    flex: 1,
+    marginRight: 10,
+  },
+
+  botonEliminar: {
+    width: 100,
+  },
+
+  confirmacion: {
+    backgroundColor: 'white',
+    padding: 20,
+    marginTop: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+  },
+
+  textoConfirmacion: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginBottom: 20,
+    fontWeight: 'bold',
+  },
+
+  botonesConfirmacion: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
 
 });
